@@ -76,7 +76,7 @@ class App extends React.Component {
               <Button icon={<UserOutlined />} shape="circle" />
             </Dropdown>
           </Header>
-          <Content style={{ height: "calc(100% - 64px)", margin: 20, overflowY: "auto", overflowX: "hidden", background: BACKGROUND_COLOR }}>
+          <Content style={{ height: "calc(100% - 64px)", overflow: "hidden", background: BACKGROUND_COLOR }}>
             {this.state.asHost ? <HostHomePage /> : <div>guest home page</div>}
           </Content>
         </Layout>

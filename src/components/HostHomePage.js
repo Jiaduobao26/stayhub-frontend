@@ -23,11 +23,9 @@ class MyStays extends React.Component {
         error: null,
     };
 
-
     componentDidMount() {
         this.loadData();
     }
-
 
     loadData = async () => {
         this.setState({ loading: true, error: null });
@@ -41,7 +39,6 @@ class MyStays extends React.Component {
         }
     };
 
-
     render() {
         const { loading, data, error } = this.state;
 
@@ -52,15 +49,7 @@ class MyStays extends React.Component {
         return (
             <List
                 loading={loading}
-                grid={{
-                    gutter: 16,
-                    xs: 1,
-                    sm: 3,
-                    md: 3,
-                    lg: 3,
-                    xl: 4,
-                    xxl: 4,
-                }}
+                grid={{ gutter: 16, xs: 1, sm: 3, md: 3, lg: 3, xl: 4, xxl: 4 }}
                 dataSource={data}
                 renderItem={(item) => (
                     <List.Item>
@@ -99,11 +88,16 @@ class MyStays extends React.Component {
 class HostHomePage extends React.Component {
     render() {
         return (
-            <Tabs defaultActiveKey="1" destroyInactiveTabPane>
+            <Tabs defaultActiveKey="1" destroyInactiveTabPane tabPosition="left">
                 <TabPane tab="My Stays" key="1">
-                    <MyStays />
+                    <div
+                        className="overflow-y-auto px-6 py-6"
+                        style={{ height: "calc(100vh - 64px)" }}
+                    >
+                        <MyStays />
+                    </div>
                 </TabPane>
-                <TabPane tab="Upload Stay" key="2">
+                <TabPane tab="Upload Stay" key="2" style={{ paddingLeft: 0 }}>
                     <UploadStay />
                 </TabPane>
             </Tabs>

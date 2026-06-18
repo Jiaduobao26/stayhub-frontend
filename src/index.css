@@ -1,5 +1,31 @@
+@tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Keep tab navigation bar fixed while content scrolls */
+.ant-tabs-nav {
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 100;
+  background: white;
+  margin: 0 !important;
+  padding-left: 20px;
+}
+
+/* Fix left tab nav so it doesn't scroll with content */
+.ant-tabs-left > .ant-tabs-nav {
+  position: sticky !important;
+  top: 0;
+  align-self: flex-start;
+  z-index: 10;
+}
+
+/* Allow multi-line labels in Ant Design Form.Item */
+.ant-form-item-label > label {
+  height: auto !important;
+  align-items: flex-start !important;
+  padding-top: 2px;
+}
 
 body {
   margin: 0;
