@@ -1,17 +1,148 @@
-import { Tabs, List, Card, Image, Carousel, Alert } from "antd";
-import { LeftCircleFilled, RightCircleFilled } from "@ant-design/icons";
+import { Tabs, List, Card, Image, Carousel, Alert, Button, Modal } from "antd";
+import { LeftCircleFilled, RightCircleFilled, InfoCircleOutlined } from "@ant-design/icons";
 import Text from "antd/lib/typography/Text";
 import React from "react";
-import { getStaysByHost } from "../utils";
+import { deleteStay, getStaysByHost } from "../utils";
 import UploadStay from "./UploadStay";
 
 
 const { TabPane } = Tabs;
 
+class ViewReservationsButton extends React.Component {
+    state = {
+        modalVisible: false,
+    };
+
+
+    openModal = () => {
+        this.setState({
+            modalVisible: true,
+        });
+    };
+
+
+    handleCancel = () => {
+        this.setState({
+            modalVisible: false,
+        });
+    };
+
+
+    render() {
+        const { stay } = this.props;
+        const { modalVisible } = this.state;
+
+
+        const modalTitle = `Reservations of ${stay.name}`;
+        return (
+            <>
+                <Button onClick={this.openModal} shape="round">
+                    View Reservations
+                </Button>
+                {modalVisible && (
+                    <Modal
+                        title={modalTitle}
+                        centered={true}
+                        visible={modalVisible}
+                        closable={false}
+                        footer={null}
+                        onCancel={this.handleCancel}
+                        destroyOnClose={true}
+                    >
+                        test
+                    </Modal>
+                )}
+            </>
+        );
+    }
+}
+
+class RemoveStayButton extends React.Component {
+    state = {
+        loading: false,
+        error: null,
+    };
+
+    handleRemoveStay = async () => {
+        const { stay, onRemoveSuccess } = this.props;
+        this.setState({ loading: true, error: null });
+
+        try {
+            await deleteStay(stay.id);
+            onRemoveSuccess();
+        } catch (error) {
+            this.setState({ error: error.message });
+        } finally {
+            this.setState({ loading: false });
+        }
+    };
+
+    render() {
+        const { loading, error } = this.state;
+        return (
+            <>
+                {error && <Alert message={error} type="error" showIcon />}
+                <Button
+                    loading={loading}
+                    onClick={this.handleRemoveStay}
+                    danger={true}
+                    shape="round"
+                    type="primary"
+                >
+                    Remove Stay
+                </Button>
+            </>
+        );
+    }
+}
+
 
 export class StayDetailInfoButton extends React.Component {
+    state = {
+        modalVisible: false,
+    };
+
+
+    openModal = () => {
+        this.setState({
+            modalVisible: true,
+        });
+    };
+
+
+    handleCancel = () => {
+
+        this.setState({
+            modalVisible: false,
+        });
+    };
+
     render() {
-        return <></>;
+        const { stay } = this.props;
+        const { name, description, address, guestNumber } = stay;
+        const { modalVisible } = this.state;
+        return (
+            <>
+                <Button
+                    onClick={this.openModal}
+                    style={{ border: "none" }}
+                    size="large"
+                    icon={<InfoCircleOutlined />}
+                />
+                {modalVisible && (
+                    <Modal
+                        title={name}
+                        centered={true}
+                        visible={modalVisible}
+                        closable={false}
+                        footer={null}
+                        onCancel={this.handleCancel}
+                    >
+                        test
+                    </Modal>
+                )}
+            </>
+        );
     }
 }
 
@@ -62,6 +193,10 @@ class MyStays extends React.Component {
                                     </Text>
                                     <StayDetailInfoButton stay={item} />
                                 </div>
+                            }
+                            actions={[<ViewReservationsButton stay={item} />]}
+                            extra={
+                                <RemoveStayButton stay={item} onRemoveSuccess={this.loadData} />
                             }
                         >
                             <Carousel
